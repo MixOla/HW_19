@@ -14,24 +14,23 @@ class AuthView(Resource):
         req_json = request.json
         username = req_json.get("username", None)
         password = req_json.get("password", None)
-        role = req_json.get("role", None)
+
         if not username or not password:
             return "Нет пароля или логина", 400
 
-        password_hash = user_service.get_user_by_username(username=username).password
+        user = user_service.get_user_by_username(username=username)
+
         return generate_tokens(username=username,
                                password=password,
-                               password_hash=password_hash,
-                               role=role,
+                               password_hash=user.password,
                                is_refresh=False), 201
 
 
 
     def put(self):
-        req_json = request.json
-        refresh_token = req_json.get("refresh_token")
-        if refresh_token is None:
-            abort(400)
+        data = request.json
+        if not data.get("refresh_token"):
+            return "", 400
 
-        return approve_token(req_json.get("refresh_token")), 200
+        return approve_token(data.get("refresh_token")), 200
 

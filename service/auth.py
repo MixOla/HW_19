@@ -4,7 +4,7 @@ import datetime
 import hashlib
 
 from flask_restx import abort
-
+# from implemented import user_service
 from constants import PWD_HASH_SALT, PWD_HASH_ITERATIONS
 
 
@@ -29,7 +29,7 @@ def compare_passwords_hash(password_hash, other_password) -> bool:
     return password_hash == generate_password_hash(other_password)
 
 
-def generate_tokens(username, password_hash, password, role, is_refresh=False):
+def generate_tokens(username, password_hash, password, is_refresh=False):
 
     if username is None:
         raise abort(404)
@@ -41,7 +41,6 @@ def generate_tokens(username, password_hash, password, role, is_refresh=False):
     data = {
         "username": username,
         "password": password,
-        "role": role
     }
 
     # access token on 30 min
@@ -58,9 +57,9 @@ def generate_tokens(username, password_hash, password, role, is_refresh=False):
     return tokens, 201
 
 
-def approve_token(token):
+def approve_token(token, user_service):
     data = jwt.decode(token, key=secret, algorithm=algo)
     username = data.get("username")
     password = data.get("password")
-    role = data.get("role")
-    return generate_tokens(username=username, password=password, role=role, is_refresh=True)
+
+    return generate_tokens(username=username, password=password, is_refresh=True)
