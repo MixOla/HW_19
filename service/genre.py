@@ -11,12 +11,12 @@ class GenreService:
     def get_all(self):
         return self.dao.get_all()
 
-    def create(self, genre_d):
-        return self.dao.create(genre_d)
+    def create(self, genre_id):
+        return self.dao.create(genre_id)
 
-    def update(self, genre_d):
-        self.dao.update(genre_d)
+    def update(self, genre_id):
+        self.dao.update(genre_id)
         return self.dao
 
-    def delete(self, rid):
-        self.dao.delete(rid)
+    def delete(self, genre_id):
+        self.dao.delete(genre_id)
