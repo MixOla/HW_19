@@ -57,9 +57,9 @@ def generate_tokens(username, password_hash, password, is_refresh=False):
     return tokens, 201
 
 
-def approve_token(token, user_service):
-    data = jwt.decode(token, key=secret, algorithm=algo)
+def approve_token(token):
+    data = jwt.decode(token, key=secret, algorithms=algo)
     username = data.get("username")
     password = data.get("password")
 
-    return generate_tokens(username=username, password=password, is_refresh=True)
+    return generate_tokens(username=username, password=password, password_hash=None, role=role, is_refresh=True)
